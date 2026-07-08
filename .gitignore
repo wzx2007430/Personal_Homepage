@@ -3,3 +3,5 @@ dist/
 db/data.db
 *.log
 .env
+
+Personal_index_extra/
