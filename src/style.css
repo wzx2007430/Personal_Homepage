@@ -1,61 +1,35 @@
 @import "tailwindcss";
-@custom-variant dark (&:where(.dark, .dark *));
 
-/* Grid background */
-.grid-bg {
-  background-image:
-    linear-gradient(rgba(0,0,0,0.04) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(0,0,0,0.04) 1px, transparent 1px);
-  background-size: 50px 50px;
-}
-.dark .grid-bg {
-  background-image:
-    linear-gradient(rgba(255,255,255,0.015) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255,255,255,0.015) 1px, transparent 1px);
+/* ===== Library Theme ===== */
+:root {
+  --paper: #f7f3eb;
+  --card: #fcf9f4;
+  --card-hover: #faf6ed;
+  --ink: #2c2416;
+  --ink-light: #6b5e4a;
+  --ink-faint: #b8a88a;
+  --rule: #d4c9b5;
+  --accent: #8b4513;
+  --accent-light: #a0522d;
+  --tag-bg: #f0e8d8;
+  --cabinet: #e8dfd0;
+  --cabinet-inner: #dfd5c2;
 }
 
-/* Smooth transitions */
+body {
+  font-family: 'Noto Serif SC', 'Georgia', 'SimSun', serif;
+  background: var(--paper);
+  color: var(--ink);
+}
+
+/* Toast notification */
+.toast-enter-active { transition: all 0.4s ease; }
+.toast-leave-active { transition: all 0.3s ease; }
+.toast-enter-from { opacity: 0; transform: translateY(-12px); }
+.toast-leave-to { opacity: 0; transform: translateY(-8px); }
+
+/* Link transitions */
 .link-enter-active,
-.link-leave-active {
-  transition: all 0.4s ease;
-}
-.link-enter-from {
-  opacity: 0;
-  transform: translateY(12px);
-}
-.link-leave-to {
-  opacity: 0;
-  transform: translateX(-12px);
-}
-
-/* Theme toggle button */
-.theme-toggle {
-  position: fixed;
-  top: 1.25rem;
-  right: 1.25rem;
-  z-index: 50;
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  border: 1px solid #ddd;
-  background: #fff;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.1rem;
-  transition: all 0.3s ease;
-  color: #555;
-}
-.dark .theme-toggle {
-  border-color: rgba(255,255,255,0.1);
-  background: rgba(255,255,255,0.05);
-  color: rgba(255,255,255,0.6);
-}
-.theme-toggle:hover {
-  border-color: #999;
-  transform: scale(1.08);
-}
-.dark .theme-toggle:hover {
-  border-color: rgba(255,255,255,0.25);
-}
+.link-leave-active { transition: all 0.4s ease; }
+.link-enter-from { opacity: 0; transform: translateY(8px); }
+.link-leave-to { opacity: 0; transform: translateX(-8px); }
