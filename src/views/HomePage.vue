@@ -6,52 +6,62 @@
         <span class="text-[0.6rem] tracking-[0.3em] uppercase" style="color:var(--ink-faint);">个人导航站 · Personal Index</span>
       </div>
 
-      <div class="rounded-sm px-8 py-8 mb-6 text-center border" style="background:var(--card);border-color:var(--rule);box-shadow:0 1px 3px rgba(0,0,0,0.03);">
-        <div class="w-[72px] h-[72px] mx-auto mb-4 rounded-full overflow-hidden flex items-center justify-center text-3xl border" style="background:#faf7f1;border-color:var(--rule);">
-          <img v-if="isImageUrl(profile.avatar)" :src="profile.avatar" class="w-full h-full object-cover" alt="avatar" />
-          <span v-else>{{ profile.avatar }}</span>
-        </div>
-        <h1 class="text-[1.5rem] font-bold tracking-[0.04em] mb-1.5" style="color:var(--ink);">{{ profile.name }}</h1>
-        <p class="text-sm leading-relaxed max-w-[320px] mx-auto whitespace-pre-line" style="color:var(--ink-light);">{{ profile.bio }}</p>
+      <!-- 加载骨架 -->
+      <template v-if="loading">
+        <div class="rounded-sm border px-8 py-10 mb-6 text-center skeleton" style="border-color:var(--rule);height:200px;"></div>
+        <div v-for="n in 3" :key="n" class="rounded-sm border px-5 py-5 mb-2.5 skeleton" style="border-color:var(--rule);height:60px;"></div>
+      </template>
 
-        <div class="flex items-center gap-2 justify-center my-4">
-          <div class="flex-1 h-px max-w-[60px]" style="background:var(--rule);"></div>
-          <div class="w-[3px] h-[3px] rounded-full" style="background:var(--accent);"></div>
-          <div class="flex-1 h-px max-w-[60px]" style="background:var(--rule);"></div>
-        </div>
-      </div>
-
-      <nav class="flex flex-col gap-2.5">
-        <a
-          v-for="link in links"
-          :key="link.id"
-          :href="link.url"
-          target="_blank"
-          rel="noopener"
-          class="group rounded-sm px-5 py-3.5 border grid gap-4 no-underline transition-all duration-300 hover:translate-x-1 hover:-rotate-[0.5deg]"
-          style="background:var(--card);border-color:var(--rule);color:var(--ink);box-shadow:0 1px 2px rgba(0,0,0,0.02);grid-template-columns:50px 1fr auto;align-items:center;"
-          @mouseenter="e => { e.currentTarget.style.borderColor='var(--accent)'; e.currentTarget.style.boxShadow='2px 3px 8px rgba(0,0,0,0.06)'; }"
-          @mouseleave="e => { e.currentTarget.style.borderColor='var(--rule)'; e.currentTarget.style.boxShadow='0 1px 2px rgba(0,0,0,0.02)'; }"
-        >
-          <span class="text-[0.6rem] tracking-[0.1em] font-mono whitespace-nowrap" style="color:var(--accent);">{{ link.callNumber || String(links.indexOf(link) + 1).padStart(2,'0') }}</span>
-          <div>
-            <div class="text-[0.9rem] font-semibold tracking-[0.02em]">{{ link.title }}</div>
-            <div class="text-xs mt-0.5" style="color:var(--ink-light);">{{ link.description }}</div>
+      <!-- 内容 -->
+      <template v-else>
+        <div class="rounded-sm px-8 py-8 mb-6 text-center border" style="background:var(--card);border-color:var(--rule);box-shadow:0 1px 3px rgba(0,0,0,0.03);">
+          <div class="w-[72px] h-[72px] mx-auto mb-4 rounded-full overflow-hidden flex items-center justify-center text-3xl border" style="background:#faf7f1;border-color:var(--rule);">
+            <img v-if="isImageUrl(profile.avatar)" :src="profile.avatar" class="w-full h-full object-cover" alt="avatar" />
+            <span v-else>{{ profile.avatar }}</span>
           </div>
-          <span class="text-sm transition-colors group-hover:opacity-100" style="color:var(--ink-faint);">→</span>
-        </a>
-      </nav>
+          <h1 class="text-[1.5rem] font-bold tracking-[0.04em] mb-1.5" style="color:var(--ink);">{{ profile.name }}</h1>
+          <p class="text-sm leading-relaxed max-w-[320px] mx-auto whitespace-pre-line" style="color:var(--ink-light);">{{ profile.bio }}</p>
+          <div class="flex items-center gap-2 justify-center my-4">
+            <div class="flex-1 h-px max-w-[60px]" style="background:var(--rule);"></div>
+            <div class="w-[3px] h-[3px] rounded-full" style="background:var(--accent);"></div>
+            <div class="flex-1 h-px max-w-[60px]" style="background:var(--rule);"></div>
+          </div>
+        </div>
 
-      <p v-if="links.length === 0" class="text-center text-sm mt-8" style="color:var(--ink-faint);">
-        暂无链接，请前往后台添加
-      </p>
+        <!-- 链接卡片（CSS hover 替代内联 JS） -->
+        <nav class="flex flex-col gap-2.5">
+          <a
+            v-for="(link, index) in links"
+            :key="link.id"
+            :href="link.url"
+            target="_blank"
+            rel="noopener"
+            class="link-card rounded-sm px-5 py-3.5 grid gap-4 no-underline"
+            style="grid-template-columns:50px 1fr auto;align-items:center;"
+          >
+            <span class="text-[0.6rem] tracking-[0.1em] font-mono whitespace-nowrap" style="color:var(--accent);">{{ link.callNumber || String(index + 1).padStart(2,'0') }}</span>
+            <div>
+              <div class="text-[0.9rem] font-semibold tracking-[0.02em]">{{ link.title }}</div>
+              <div class="text-xs mt-0.5" style="color:var(--ink-light);">{{ link.description }}</div>
+            </div>
+            <span class="text-sm" style="color:var(--ink-faint);">→</span>
+          </a>
+        </nav>
 
+        <p v-if="!loading && links.length === 0" class="text-center text-sm mt-8" style="color:var(--ink-faint);">
+          暂无链接，请前往后台添加
+        </p>
+
+        <p v-if="error" class="text-center text-xs mt-4" style="color:#c0392b;">加载失败，请刷新页面重试</p>
+      </template>
+
+      <!-- 备案 -->
       <div class="text-center mt-10 space-y-1">
         <p v-if="settings.icp_number" class="text-[0.65rem]" style="color:var(--ink-faint);">
-          <a :href="'https://beian.miit.gov.cn'" target="_blank" rel="noopener" class="hover:underline">{{ settings.icp_number }}</a>
+          <a href="https://beian.miit.gov.cn" target="_blank" rel="noopener" class="hover:underline">{{ settings.icp_number }}</a>
         </p>
         <p v-if="settings.police_number" class="text-[0.65rem]" style="color:var(--ink-faint);">
-          <a :href="'http://www.beian.gov.cn/portal/registerSystemInfo'" target="_blank" rel="noopener" class="hover:underline">{{ settings.police_number }}</a>
+          <a href="http://www.beian.gov.cn/portal/registerSystemInfo" target="_blank" rel="noopener" class="hover:underline">{{ settings.police_number }}</a>
         </p>
         <p class="text-[0.65rem] mt-2" style="color:var(--ink-faint);">{{ profile.name }}的个人主页 · {{ new Date().getFullYear() }}</p>
       </div>
@@ -62,27 +72,35 @@
 <script setup>
 import { ref, reactive, onMounted } from 'vue'
 
-const profile = ref({ name: '张三', avatar: '🧑‍💻', bio: '全栈开发者 · 开源爱好者 · 终身学习者\n关注前端技术与数字产品设计' })
+const profile = ref({ name: '张三', avatar: '🧑‍💻', bio: '' })
 const links = ref([])
 const settings = reactive({ icp_number: '', police_number: '' })
+const loading = ref(true)
+const error = ref(false)
 
 function isImageUrl(val) { return val && (val.startsWith('http://') || val.startsWith('https://')) }
 
-function setFavicon(url) {
-  const link = document.getElementById('favicon')
-  if (link) link.href = url || "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧑‍💻</text></svg>"
-}
-
 onMounted(async () => {
   try {
-    const [pRes, lRes, sRes] = await Promise.all([fetch('/api/profile'), fetch('/api/links'), fetch('/api/settings')])
+    const [pRes, lRes, sRes] = await Promise.all([
+      fetch('/api/profile'),
+      fetch('/api/links'),
+      fetch('/api/settings')
+    ])
     if (pRes.ok) profile.value = await pRes.json()
     if (lRes.ok) links.value = await lRes.json()
     if (sRes.ok) {
       const s = await sRes.json()
       Object.assign(settings, s)
-      if (s.favicon_url) setFavicon(s.favicon_url)
+      // 动态设置 favicon
+      const favicon = document.getElementById('favicon')
+      if (favicon && s.favicon_url) favicon.href = s.favicon_url
     }
-  } catch (e) { console.error(e) }
+  } catch (e) {
+    console.error('加载数据失败:', e)
+    error.value = true
+  } finally {
+    loading.value = false
+  }
 })
 </script>
