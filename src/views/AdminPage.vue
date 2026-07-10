@@ -1,5 +1,4 @@
 <template>
-  <!-- Toast -->
   <Transition name="toast">
     <div v-if="toast.show" class="fixed top-6 left-1/2 -translate-x-1/2 z-[100] px-5 py-2.5 rounded-sm text-sm text-white shadow-lg" style="background:var(--accent);">
       {{ toast.msg }}
@@ -7,13 +6,12 @@
   </Transition>
 
   <div class="min-h-screen flex items-center justify-center px-6 py-12">
-    <!-- 登录 -->
     <div v-if="!authenticated" class="w-full max-w-[360px]">
       <div class="rounded-sm border px-8 py-10 text-center" style="background:var(--card);border-color:var(--rule);">
-        <h1 class="text-xl font-bold tracking-wider mb-2" style="color:var(--ink);">馆员入口</h1>
-        <p class="text-xs mb-8" style="color:var(--ink-faint);">Librarian Access</p>
+        <h1 class="text-xl font-bold tracking-wider mb-2" style="color:var(--ink);">后台管理</h1>
+        <p class="text-xs mb-8" style="color:var(--ink-faint);">Admin Panel</p>
         <form @submit.prevent="login" class="flex flex-col gap-4">
-          <input v-model="password" type="password" placeholder="通行密钥"
+          <input v-model="password" type="password" placeholder="管理密码"
             class="w-full px-4 py-2.5 border rounded-sm text-sm text-center placeholder:tracking-wider focus:outline-none transition-colors"
             style="background:var(--paper);border-color:var(--rule);color:var(--ink);"
             @focus="e => e.target.style.borderColor='var(--accent)'"
@@ -30,17 +28,15 @@
       </div>
     </div>
 
-    <!-- 管理面板 -->
-    <div v-else class="w-full max-w-[680px]">
+    <div v-else class="w-full max-w-[720px]">
       <div class="flex items-center justify-between mb-8">
         <div>
-          <h1 class="text-xl font-bold tracking-wider" style="color:var(--ink);">馆员工作台</h1>
-          <p class="text-[0.6rem] tracking-[0.2em] uppercase mt-1" style="color:var(--ink-faint);">Librarian Desk</p>
+          <h1 class="text-xl font-bold tracking-wider" style="color:var(--ink);">管理后台</h1>
+          <p class="text-[0.6rem] tracking-[0.2em] uppercase mt-1" style="color:var(--ink-faint);">Admin</p>
         </div>
-        <button @click="logout" class="text-xs tracking-wider hover:underline" style="color:var(--ink-faint);">签退</button>
+        <button @click="logout" class="text-xs tracking-wider hover:underline" style="color:var(--ink-faint);">退出</button>
       </div>
 
-      <!-- 头像预览 -->
       <section class="rounded-sm border px-6 py-6 mb-4 text-center" style="background:var(--card);border-color:var(--rule);">
         <div class="w-[68px] h-[68px] mx-auto rounded-full overflow-hidden flex items-center justify-center text-2xl border" style="background:#faf7f1;border-color:var(--rule);">
           <img v-if="isImageUrl(profileForm.avatar)" :src="profileForm.avatar" class="w-full h-full object-cover" alt="预览" />
@@ -49,9 +45,8 @@
         <p class="text-[0.65rem] mt-2" style="color:var(--ink-faint);">头像预览</p>
       </section>
 
-      <!-- 个人信息 -->
       <section class="rounded-sm border px-6 py-6 mb-4" style="background:var(--card);border-color:var(--rule);">
-        <h2 class="text-[0.7rem] tracking-[0.2em] uppercase mb-5 pb-3 border-b" style="color:var(--accent);border-color:var(--rule);">读者信息卡</h2>
+        <h2 class="text-[0.7rem] tracking-[0.2em] uppercase mb-5 pb-3 border-b" style="color:var(--accent);border-color:var(--rule);">个人信息</h2>
         <div class="grid gap-4">
           <div class="flex items-center gap-3">
             <label class="text-xs w-16 shrink-0 tracking-wider" style="color:var(--ink-light);">头像</label>
@@ -79,14 +74,13 @@
               class="px-5 py-1.5 rounded-sm text-xs tracking-wider transition-all border"
               style="background:var(--tag-bg);border-color:var(--rule);color:var(--ink-light);"
               @mouseenter="e => { e.target.style.background='var(--accent)'; e.target.style.color='#fff'; e.target.style.borderColor='var(--accent)'; }"
-              @mouseleave="e => { e.target.style.background='var(--tag-bg)'; e.target.style.color='var(--ink-light)'; e.target.style.borderColor='var(--rule)'; }">归档</button>
+              @mouseleave="e => { e.target.style.background='var(--tag-bg)'; e.target.style.color='var(--ink-light)'; e.target.style.borderColor='var(--rule)'; }">保存</button>
           </div>
         </div>
       </section>
 
-      <!-- 网站设置 -->
       <section class="rounded-sm border px-6 py-6 mb-4" style="background:var(--card);border-color:var(--rule);">
-        <h2 class="text-[0.7rem] tracking-[0.2em] uppercase mb-5 pb-3 border-b" style="color:var(--accent);border-color:var(--rule);">馆藏信息</h2>
+        <h2 class="text-[0.7rem] tracking-[0.2em] uppercase mb-5 pb-3 border-b" style="color:var(--accent);border-color:var(--rule);">网站设置</h2>
         <div class="grid gap-4">
           <div class="flex items-center gap-3">
             <label class="text-xs w-16 shrink-0 tracking-wider" style="color:var(--ink-light);">图标</label>
@@ -114,20 +108,19 @@
               class="px-5 py-1.5 rounded-sm text-xs tracking-wider transition-all border"
               style="background:var(--tag-bg);border-color:var(--rule);color:var(--ink-light);"
               @mouseenter="e => { e.target.style.background='var(--accent)'; e.target.style.color='#fff'; e.target.style.borderColor='var(--accent)'; }"
-              @mouseleave="e => { e.target.style.background='var(--tag-bg)'; e.target.style.color='var(--ink-light)'; e.target.style.borderColor='var(--rule)'; }">归档</button>
+              @mouseleave="e => { e.target.style.background='var(--tag-bg)'; e.target.style.color='var(--ink-light)'; e.target.style.borderColor='var(--rule)'; }">保存</button>
           </div>
         </div>
       </section>
 
-      <!-- 密码 -->
       <section class="rounded-sm border px-6 py-6 mb-4" style="background:var(--card);border-color:var(--rule);">
-        <h2 class="text-[0.7rem] tracking-[0.2em] uppercase mb-5 pb-3 border-b" style="color:var(--accent);border-color:var(--rule);">更换通行密钥</h2>
+        <h2 class="text-[0.7rem] tracking-[0.2em] uppercase mb-5 pb-3 border-b" style="color:var(--accent);border-color:var(--rule);">修改密码</h2>
         <div class="grid gap-3 max-w-[320px]">
-          <input v-model="pwForm.oldPassword" type="password" placeholder="原密钥"
+          <input v-model="pwForm.oldPassword" type="password" placeholder="原密码"
             class="w-full px-3 py-2 border rounded-sm text-sm focus:outline-none transition-colors"
             style="background:var(--paper);border-color:var(--rule);color:var(--ink);"
             @focus="e => e.target.style.borderColor='var(--accent)'" @blur="e => e.target.style.borderColor='var(--rule)'" />
-          <input v-model="pwForm.newPassword" type="password" placeholder="新密钥（至少4位）"
+          <input v-model="pwForm.newPassword" type="password" placeholder="新密码（至少4位）"
             class="w-full px-3 py-2 border rounded-sm text-sm focus:outline-none transition-colors"
             style="background:var(--paper);border-color:var(--rule);color:var(--ink);"
             @focus="e => e.target.style.borderColor='var(--accent)'" @blur="e => e.target.style.borderColor='var(--rule)'" />
@@ -137,43 +130,48 @@
               class="px-5 py-1.5 rounded-sm text-xs tracking-wider transition-all border"
               style="background:var(--tag-bg);border-color:var(--rule);color:var(--ink-light);"
               @mouseenter="e => { e.target.style.background='var(--accent)'; e.target.style.color='#fff'; e.target.style.borderColor='var(--accent)'; }"
-              @mouseleave="e => { e.target.style.background='var(--tag-bg)'; e.target.style.color='var(--ink-light)'; e.target.style.borderColor='var(--rule)'; }">更换</button>
+              @mouseleave="e => { e.target.style.background='var(--tag-bg)'; e.target.style.color='var(--ink-light)'; e.target.style.borderColor='var(--rule)'; }">修改</button>
           </div>
         </div>
       </section>
 
-      <!-- 链接管理 -->
       <section class="rounded-sm border px-6 py-6 mb-4" style="background:var(--card);border-color:var(--rule);">
         <div class="flex items-center justify-between mb-5 pb-3 border-b" style="border-color:var(--rule);">
-          <h2 class="text-[0.7rem] tracking-[0.2em] uppercase" style="color:var(--accent);">目录卡片管理</h2>
+          <h2 class="text-[0.7rem] tracking-[0.2em] uppercase" style="color:var(--accent);">子网站链接</h2>
           <button @click="addLink"
-            class="text-xs tracking-wider transition-colors hover:underline" style="color:var(--ink-faint);">+ 新卡片</button>
+            class="text-xs tracking-wider transition-colors hover:underline" style="color:var(--ink-faint);">+ 添加</button>
         </div>
 
-        <TransitionGroup name="link" tag="div" class="flex flex-col gap-2">
+        <TransitionGroup name="link" tag="div" class="flex flex-col gap-3">
           <div v-for="(link, index) in links" :key="link.id"
-            class="group flex items-center gap-3 py-2.5 border-b" style="border-color:var(--rule);">
-            <span class="text-[0.6rem] font-mono w-12 shrink-0 text-right tracking-[0.08em]" style="color:var(--accent);">{{ 'Z ' + String(index + 1).padStart(3,'0') }}</span>
-            <input v-model="link.callNumber" placeholder="索书号"
-              class="w-20 px-2 py-1.5 border rounded-sm text-xs focus:outline-none transition-colors"
-              style="background:var(--paper);border-color:var(--rule);color:var(--ink);"
-              @focus="e => e.target.style.borderColor='var(--accent)'" @blur="e => e.target.style.borderColor='var(--rule)'" />
-            <input v-model="link.title" placeholder="标题"
-              class="flex-1 px-2 py-1.5 border rounded-sm text-xs focus:outline-none transition-colors"
-              style="background:var(--paper);border-color:var(--rule);color:var(--ink);"
-              @focus="e => e.target.style.borderColor='var(--accent)'" @blur="e => e.target.style.borderColor='var(--rule)'" />
-            <input v-model="link.url" placeholder="链接"
-              class="flex-1 px-2 py-1.5 border rounded-sm text-xs focus:outline-none transition-colors"
-              style="background:var(--paper);border-color:var(--rule);color:var(--ink);"
-              @focus="e => e.target.style.borderColor='var(--accent)'" @blur="e => e.target.style.borderColor='var(--rule)'" />
-            <input v-model="link.description" placeholder="描述"
-              class="flex-[0.8] px-2 py-1.5 border rounded-sm text-xs focus:outline-none transition-colors"
-              style="background:var(--paper);border-color:var(--rule);color:var(--ink);"
-              @focus="e => e.target.style.borderColor='var(--accent)'" @blur="e => e.target.style.borderColor='var(--rule)'" />
-            <div class="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity shrink-0">
-              <button @click="moveLink(index, -1)" :disabled="index===0" class="text-xs disabled:opacity-10 hover:text-black px-1" style="color:var(--ink-faint);">&uarr;</button>
-              <button @click="moveLink(index, 1)" :disabled="index===links.length-1" class="text-xs disabled:opacity-10 hover:text-black px-1" style="color:var(--ink-faint);">&darr;</button>
-              <button @click="removeLink(index)" class="text-xs px-1" style="color:#c0392b;">✕</button>
+            class="group rounded-sm border px-4 py-3" style="border-color:var(--rule);background:var(--paper);">
+            <div class="flex items-center gap-2">
+              <span class="text-[0.6rem] font-mono shrink-0 tracking-[0.06em]" style="color:var(--accent);">编号</span>
+              <input v-model="link.callNumber" placeholder="Z 001"
+                class="w-[72px] px-2 py-1.5 border rounded-sm text-xs focus:outline-none transition-colors"
+                style="background:#fff;border-color:var(--rule);color:var(--ink);"
+                @focus="e => e.target.style.borderColor='var(--accent)'" @blur="e => e.target.style.borderColor='var(--rule)'" />
+              <input v-model="link.title" placeholder="标题"
+                class="flex-1 px-2 py-1.5 border rounded-sm text-xs focus:outline-none transition-colors"
+                style="background:#fff;border-color:var(--rule);color:var(--ink);"
+                @focus="e => e.target.style.borderColor='var(--accent)'" @blur="e => e.target.style.borderColor='var(--rule)'" />
+              <div class="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity shrink-0">
+                <button @click="moveLink(index,-1)" :disabled="index===0" class="text-xs disabled:opacity-10 hover:text-black px-1" style="color:var(--ink-faint);">&uarr;</button>
+                <button @click="moveLink(index,1)" :disabled="index===links.length-1" class="text-xs disabled:opacity-10 hover:text-black px-1" style="color:var(--ink-faint);">&darr;</button>
+                <button @click="removeLink(index)" class="text-xs px-1" style="color:#c0392b;">✕</button>
+              </div>
+            </div>
+            <div class="flex items-center gap-2 mt-2">
+              <span class="text-[0.6rem] shrink-0 tracking-[0.06em]" style="color:var(--ink-faint);">URL</span>
+              <input v-model="link.url" placeholder="https://..."
+                class="flex-[2] px-2 py-1.5 border rounded-sm text-xs focus:outline-none transition-colors"
+                style="background:#fff;border-color:var(--rule);color:var(--ink);"
+                @focus="e => e.target.style.borderColor='var(--accent)'" @blur="e => e.target.style.borderColor='var(--rule)'" />
+              <span class="text-[0.6rem] shrink-0 tracking-[0.06em]" style="color:var(--ink-faint);">描述</span>
+              <input v-model="link.description" placeholder="简述"
+                class="flex-[3] px-2 py-1.5 border rounded-sm text-xs focus:outline-none transition-colors"
+                style="background:#fff;border-color:var(--rule);color:var(--ink);"
+                @focus="e => e.target.style.borderColor='var(--accent)'" @blur="e => e.target.style.borderColor='var(--rule)'" />
             </div>
           </div>
         </TransitionGroup>
@@ -183,7 +181,7 @@
             class="px-5 py-1.5 rounded-sm text-xs tracking-wider transition-all border"
             style="background:var(--tag-bg);border-color:var(--rule);color:var(--ink-light);"
             @mouseenter="e => { e.target.style.background='var(--accent)'; e.target.style.color='#fff'; e.target.style.borderColor='var(--accent)'; }"
-            @mouseleave="e => { e.target.style.background='var(--tag-bg)'; e.target.style.color='var(--ink-light)'; e.target.style.borderColor='var(--rule)'; }">归档</button>
+            @mouseleave="e => { e.target.style.background='var(--tag-bg)'; e.target.style.color='var(--ink-light)'; e.target.style.borderColor='var(--rule)'; }">保存</button>
         </div>
       </section>
 
@@ -209,11 +207,7 @@ const pwOk = ref(false)
 
 const toast = reactive({ show: false, msg: '' })
 let toastTimer = null
-function showToast(msg) {
-  toast.msg = msg; toast.show = true
-  clearTimeout(toastTimer)
-  toastTimer = setTimeout(() => { toast.show = false }, 2000)
-}
+function showToast(msg) { toast.msg = msg; toast.show = true; clearTimeout(toastTimer); toastTimer = setTimeout(() => { toast.show = false }, 2000) }
 
 function isImageUrl(val) { return val && (val.startsWith('http://') || val.startsWith('https://')) }
 function setFavicon(url) {
@@ -226,7 +220,7 @@ async function login() {
     const res = await fetch('/api/auth/verify', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({password:password.value}) })
     const data = await res.json()
     if (data.valid) { authenticated.value=true; loginError.value=''; localStorage.setItem('admin_auth','1'); await loadData() }
-    else { loginError.value='通行密钥错误' }
+    else { loginError.value='密码错误' }
   } catch (e) { loginError.value='服务器错误' }
 }
 
@@ -243,29 +237,29 @@ async function loadData() {
 
 async function saveProfile() {
   await fetch('/api/profile', { method:'PUT', headers:{'Content-Type':'application/json'}, body:JSON.stringify(profileForm) })
-  showToast('读者信息已归档')
+  showToast('个人信息已保存')
 }
 
 async function saveSettings() {
   await fetch('/api/settings', { method:'PUT', headers:{'Content-Type':'application/json'}, body:JSON.stringify(settingsForm) })
   setFavicon(settingsForm.favicon_url)
-  showToast('馆藏信息已归档')
+  showToast('网站设置已保存')
 }
 
 async function changePw() {
   pwMsg.value=''; pwOk.value=false
-  if (!pwForm.newPassword || pwForm.newPassword.length<4) { pwMsg.value='新密钥至少4位'; return }
+  if (!pwForm.newPassword || pwForm.newPassword.length<4) { pwMsg.value='新密码至少4位'; return }
   try {
     const res = await fetch('/api/auth/change-password', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(pwForm) })
     const data = await res.json()
-    if (res.ok && data.ok) { pwMsg.value=''; pwOk.value=true; pwForm.oldPassword=''; pwForm.newPassword=''; showToast('通行密钥已更换') }
-    else { pwMsg.value=data.error||'更换失败' }
+    if (res.ok && data.ok) { pwMsg.value=''; pwOk.value=true; pwForm.oldPassword=''; pwForm.newPassword=''; showToast('密码已修改') }
+    else { pwMsg.value=data.error||'修改失败' }
   } catch(e) { pwMsg.value='服务器错误' }
 }
 
 async function saveLinks() {
   await fetch('/api/links', { method:'PUT', headers:{'Content-Type':'application/json'}, body:JSON.stringify(links.value) })
-  showToast('目录卡片已归档')
+  showToast('链接已保存')
 }
 
 function addLink() { links.value.push({ id:Date.now(), callNumber:'', title:'', url:'', description:'' }) }
